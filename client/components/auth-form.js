@@ -5,15 +5,15 @@ import useRequest from '../hooks/use-request';
 const AuthForm = ({ apiUrl, redirectPath, label }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { doRequest, errors } = useRequest(
-    apiUrl,
-    'post',
-    {
+  const { doRequest, errors } = useRequest({
+    url: apiUrl,
+    method: 'post',
+    body: {
       email,
       password,
     },
-    () => Router.push(redirectPath)
-  );
+    onSuccess: () => Router.push(redirectPath),
+  });
 
   const onSubmit = async (event) => {
     event.preventDefault();
