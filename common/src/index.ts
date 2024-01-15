@@ -1,3 +1,4 @@
+// Re-export all the common logic
 export * from './errors/bad-request-error';
 export * from './errors/custom-error';
 export * from './errors/database-connection-error';

@@ -23,3 +23,11 @@ build:
             dest: .
       docker:
         dockerfile: Dockerfile
+    - image: bmate11/ticket-service
+      context: ticket-service
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+      docker:
+        dockerfile: Dockerfile
