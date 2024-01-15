@@ -1,38 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: ticket-service-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: ticket-service
   template:
     metadata:
       labels:
-        app: auth
+        app: ticket-service
     spec:
       containers:
-        - name: auth
-          image: bmate11/auth
+        - name: ticket-service
+          image: bmate11/ticket-service
           env:
-            - name: MONGO_URI
-              value: 'mongodb://auth-mongo-srv:27017/auth'
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
+            - name: MONGO_URI
+              value: 'mongodb://ticket-service-mongo-srv:27017/ticket-service'
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-srv
+  name: ticket-service-srv
 spec:
   selector:
-    app: auth
+    app: ticket-service
   ports:
-    - name: auth
+    - name: ticket-service
       protocol: TCP
       port: 3000
       targetPort: 3000
