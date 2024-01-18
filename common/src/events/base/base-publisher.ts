@@ -18,6 +18,9 @@ type Event = {
 export abstract class Publisher<T extends Event> {
   abstract subject: T['subject'];
 
+  /**
+   * @param {Stan} client - The NATS Streaming client.
+   */
   constructor(private client: Stan) {}
 
   async publish(data: T['data']): Promise<void> {

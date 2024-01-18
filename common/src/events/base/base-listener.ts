@@ -12,8 +12,6 @@ type Event = {
  * @extends {Event}
  * @property {Subjects} subject - The subject of the event.
  * @property {any} data - Any data associated with the event.
- * @constructor
- * @param {Stan} client - The NATS Streaming client.
  */
 export abstract class Listener<T extends Event> {
   abstract subject: T['subject'];
@@ -22,6 +20,10 @@ export abstract class Listener<T extends Event> {
 
   protected ackWait = 5 * 10000;
 
+  /**
+   *
+   * @param {Stan} client - The NATS Streaming client.
+   */
   constructor(private client: Stan) {}
 
   get subscriptionOptions(): SubscriptionOptions {
