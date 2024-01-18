@@ -1,11 +1,20 @@
 import { Message, Stan, SubscriptionOptions } from 'node-nats-streaming';
 import { Subjects } from '../subjects';
 
-interface Event {
+type Event = {
   subject: Subjects;
   data: any;
-}
+};
 
+/**
+ * Listener base class. Should extend specific listener classes.
+ * @template T - The type that extends the specified interface.
+ * @extends {Event}
+ * @property {Subjects} subject - The subject of the event.
+ * @property {any} data - Any data associated with the event.
+ * @constructor
+ * @param {Stan} client - The NATS Streaming client.
+ */
 export abstract class Listener<T extends Event> {
   abstract subject: T['subject'];
   abstract onMessage(data: T['data'], msg: Message): void;
