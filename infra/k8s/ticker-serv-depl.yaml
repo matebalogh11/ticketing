@@ -12,6 +12,15 @@ spec:
       labels:
         app: ticket-service
     spec:
+      initContainers:
+        - name: wait-for-nats
+          image: busybox
+          command:
+            [
+              'sh',
+              '-c',
+              'until nc -z nats-srv 8222; do echo "Waiting for NATS..."; sleep 5; done;',
+            ]
       containers:
         - name: ticket-service
           image: bmate11/ticket-service
