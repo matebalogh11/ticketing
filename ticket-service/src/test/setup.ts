@@ -7,6 +7,8 @@ declare global {
   var generateMongooseId: () => string;
 }
 
+jest.mock('../nats-wrapper');
+
 let mongo: any;
 
 beforeAll(async () => {
@@ -23,6 +25,8 @@ beforeEach(async () => {
   for (let collection of collections) {
     await collection.deleteMany({});
   }
+
+  jest.clearAllMocks();
 });
 
 afterAll(async () => {
