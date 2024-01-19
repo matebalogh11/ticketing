@@ -3,7 +3,13 @@ import app from './app';
 import { natsWrapper } from './nats-wrapper';
 
 const start = async () => {
-  const envVariables = ['JWT_KEY', 'MONGO_URI'];
+  const envVariables = [
+    'JWT_KEY',
+    'MONGO_URI',
+    'CLUSTER_ID',
+    'CLIENT_ID',
+    'NATS_URL',
+  ];
 
   envVariables.forEach((envVar) => {
     if (!process.env[envVar]) {
@@ -13,9 +19,9 @@ const start = async () => {
 
   try {
     await natsWrapper.connect(
-      'ticketing',
-      'my_client_id',
-      'http://nats-srv:4222'
+      process.env.CLUSTER_ID!,
+      process.env.CLIENT_ID!,
+      process.env.NATS_URL!
     );
     natsWrapper.client.on('close', () => {
       console.log('NATS connection closed');

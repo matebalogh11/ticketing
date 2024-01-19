@@ -1,6 +1,7 @@
 import request from 'supertest';
 import app from '../../app';
 import { natsWrapper } from '../../nats-wrapper';
+import { Subjects } from '@ticketchef/common';
 
 it('returns a 404 if the provice id does not exist', async () => {
   await request(app)
@@ -112,4 +113,16 @@ it('publishes an event', async () => {
     });
 
   expect(natsWrapper.client.publish).toHaveBeenCalledTimes(2);
+  expect(natsWrapper.client.publish).toHaveBeenNthCalledWith(
+    1,
+    Subjects.TicketCreated,
+    expect.anything(),
+    expect.anything()
+  );
+  expect(natsWrapper.client.publish).toHaveBeenNthCalledWith(
+    2,
+    Subjects.TicketUpdated,
+    expect.anything(),
+    expect.anything()
+  );
 });
