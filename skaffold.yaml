@@ -29,5 +29,11 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: bmate11/order-service
+      context: order-service
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
       docker:
         dockerfile: Dockerfile

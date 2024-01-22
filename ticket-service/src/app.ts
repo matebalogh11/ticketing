@@ -8,7 +8,7 @@ import { currentUser, errorHandler } from '@ticketchef/common';
 import { NotFoundError } from '@ticketchef/common';
 import { createTicketRouter } from './routes/new';
 import { showTicketRouter } from './routes/show';
-import { allTicketRouter } from './routes/all';
+import { indexTicketRouter } from './routes';
 import { updateTicketRouter } from './routes/update';
 
 const app = express();
@@ -24,7 +24,7 @@ app.use(currentUser);
 
 app.use(createTicketRouter);
 app.use(showTicketRouter);
-app.use(allTicketRouter);
+app.use(indexTicketRouter);
 app.use(updateTicketRouter);
 
 app.all('*', () => {
