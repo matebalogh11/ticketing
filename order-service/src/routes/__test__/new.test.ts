@@ -2,6 +2,10 @@ import request from 'supertest';
 import app from '../../app';
 import { Ticket } from '../../models/ticket';
 import { Order, OrderStatus } from '../../models/order';
+import { natsWrapper } from '../../nats-wrapper';
+import { Subjects } from '@ticketchef/common';
+
+jest.mock('../../nats-wrapper.ts');
 
 it('has a route handler listening to /api/orders for post requests', async () => {
   const response = await request(app).post('/api/orders').send({});
@@ -83,4 +87,24 @@ it('reserves a ticket', async () => {
   expect(response.body.ticket.title).toEqual(ticket.title);
 });
 
-it.todo('emits an order created event');
+it('emits an order created event', async () => {
+  const ticket = await Ticket.build({
+    title: 'test',
+    price: 20,
+  }).save();
+
+  const response = await request(app)
+    .post('/api/orders')
+    .set('Cookie', getAuthCookie())
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(201);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalledTimes(1);
+  expect(natsWrapper.client.publish).toHaveBeenLastCalledWith(
+    Subjects.OrderCreated,
+    expect.anything(),
+    expect.anything()
+  );
+});
