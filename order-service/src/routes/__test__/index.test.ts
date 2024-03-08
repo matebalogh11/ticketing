@@ -6,6 +6,7 @@ import { Ticket, TicketDoc } from '../../models/ticket';
 const buildTicket = async () => {
   const ticket = Ticket.build({
     title: 'movie',
+    id: generateMongooseId(),
     price: 23,
   });
 

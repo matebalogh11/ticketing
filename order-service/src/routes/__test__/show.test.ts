@@ -6,6 +6,7 @@ it('fetches the order', async () => {
   const user = getAuthCookie();
 
   const ticket = await Ticket.build({
+    id: generateMongooseId(),
     title: 'movie',
     price: 23,
   }).save();
@@ -27,6 +28,7 @@ it('fetches the order', async () => {
 
 it('returns 401 if the orders user id is different than in the request', async () => {
   const ticket = await Ticket.build({
+    id: generateMongooseId(),
     title: 'movie',
     price: 23,
   }).save();

@@ -9,8 +9,8 @@ jest.mock('../../nats-wrapper.ts');
 
 it('cancels the order successfully', async () => {
   const user = getAuthCookie();
-
   const ticket = await Ticket.build({
+    id: generateMongooseId(),
     title: 'movie',
     price: 23,
   }).save();
@@ -36,6 +36,7 @@ it('emits an order cancelled event', async () => {
   const user = getAuthCookie();
 
   const ticket = await Ticket.build({
+    id: generateMongooseId(),
     title: 'movie',
     price: 23,
   }).save();
