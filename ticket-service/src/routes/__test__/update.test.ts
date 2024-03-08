@@ -2,6 +2,8 @@ import request from 'supertest';
 import app from '../../app';
 import { natsWrapper } from '../../nats-wrapper';
 import { Subjects } from '@ticketchef/common';
+import { Ticket } from '../../models/ticket';
+import 'express-async-errors';
 
 it('returns a 404 if the provice id does not exist', async () => {
   await request(app)
@@ -125,4 +127,28 @@ it('publishes an event', async () => {
     expect.anything(),
     expect.anything()
   );
+});
+
+it('rejects updates if the ticket is reserved', async () => {
+  const cookie = getAuthCookie();
+
+  const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({
+      title: 'music',
+      price: 20,
+    });
+
+  const ticket = await Ticket.findById(response.body.id);
+  await ticket?.set({ orderId: generateMongooseId() }).save();
+
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'musicA',
+      price: 10,
+    })
+    .expect(400);
 });
