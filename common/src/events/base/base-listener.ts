@@ -24,7 +24,7 @@ export abstract class Listener<T extends Event> {
    *
    * @param {Stan} client - The NATS Streaming client.
    */
-  constructor(private client: Stan) {}
+  constructor(protected client: Stan) {}
 
   get subscriptionOptions(): SubscriptionOptions {
     return this.client
